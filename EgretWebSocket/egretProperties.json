@@ -1,0 +1,36 @@
+{
+  "engineVersion": "5.1.9",
+  "compilerVersion": "5.1.9",
+  "template": {},
+  "target": {
+    "current": "web"
+  },
+  "modules": [
+    {
+      "name": "egret"
+    },
+    {
+      "name": "game"
+    },
+    {
+      "name": "tween"
+    },
+    {
+      "name": "assetsmanager"
+    },
+    {
+      "name": "socket"
+    },
+    {
+      "name": "promise"
+    },
+    {
+      "name": "protobuf-lib",
+      "path": "../ExternalLibs/ProtobufLib/"
+    },
+    {
+      "name": "protobuf-msg",
+      "path": "../ExternalLibs/ProtobufMsg/"
+    }
+  ]
+}
