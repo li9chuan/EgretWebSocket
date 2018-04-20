@@ -50,8 +50,8 @@ class ClientPeer {
 
         let msgout = new SocketMsg("LOGIN");
         msgout.wint32(111);
-        msgout.wdouble(222);
-        msgout.wstring("333333");
+        msgout.wdouble(222.22);
+        msgout.wstring("string");
         msgout.wint64(4611686016279344128);
         msgout.wint64(-4611686016279344128);
 
@@ -83,12 +83,14 @@ class ClientPeer {
 
         if( this.recv_buffer.bytesAvailable > 4 ) {
 
+            this.recv_buffer.endian    = egret.Endian.BIG_ENDIAN;
             let msg_len = this.recv_buffer.readInt();
+            this.recv_buffer.endian    = egret.Endian.LITTLE_ENDIAN;
 
-            if( this.recv_buffer.bytesAvailable >= msg_len+4 ) {
+            if( this.recv_buffer.bytesAvailable >= msg_len ) {
 
                 let msg = new SocketMsg();
-                msg.fill(this.recv_buffer, msg_len);
+                msg.fill(this.recv_buffer, this.recv_buffer.position, msg_len);
 
                 this.processReceive(msg);
 
@@ -104,12 +106,28 @@ class ClientPeer {
 
     private processReceive(msg: SocketMsg) {
         console.log("recv msg : " + msg.name);
-        console.log( msg.rint32() );
-        console.log( msg.rdouble() );
-        console.log( msg.rstring() );
-        console.log( msg.rint64() );
-        console.log( msg.rint64() );
-        console.log( msg.rprotobuf(PB_MSG.MsgLogin) );
+
+        switch (msg.name){
+            case "AuthOk":
+            break;
+
+            case "LOGIN":
+                console.log( msg.rint32() );
+                console.log( msg.rdouble() );
+                console.log( msg.rstring() );
+                console.log( msg.rint64() );
+                console.log( msg.rint64() );
+                console.log( msg.rprotobuf(PB_MSG.MsgLogin) );
+            break;
+            case "SyncPlayerInfo":
+                let player_info = msg.rprotobuf(PB_MSG.MsgPlayerInfo);
+                console.log( player_info.UID );
+                console.log( player_info );
+            break;
+            default:
+            break;
+        }
+
 
         //this.application.onReceive(msg);
     }
@@ -120,7 +138,9 @@ class ClientPeer {
     public sendMsg(msg: SocketMsg) : void{
         try {
             this.send_buffer.clear();
+            this.send_buffer.endian    = egret.Endian.BIG_ENDIAN;
             this.send_buffer.writeInt(msg.buff_msg.length);
+            this.send_buffer.endian    = egret.Endian.LITTLE_ENDIAN;
             this.send_buffer.writeBytes(msg.buff_msg);
 
             this.socket.writeBytes(this.send_buffer, 0, this.send_buffer.bytesAvailable);

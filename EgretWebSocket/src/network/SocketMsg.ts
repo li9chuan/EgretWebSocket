@@ -18,9 +18,9 @@ class SocketMsg {
         this.wstring(this.name);
     }
 
-    fill( val: egret.ByteArray, len: number ) {
+    fill( val: egret.ByteArray, offset:number, len: number ) {
         this.buff_msg.clear();
-        this.buff_msg.writeBytes(val, 0, len);
+        this.buff_msg.writeBytes(val, offset, len);
 
         // read name
         this.buff_msg.position = 5;
