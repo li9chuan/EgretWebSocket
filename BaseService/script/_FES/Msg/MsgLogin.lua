@@ -10,29 +10,82 @@ function MsgLogin:ctor( Data )
 	
     --  客户端消息
 	self._EventRegister:RegisterEvent( "LOGIN",     self, self.CBLogin );
-
+    
+    --  服务器间消息
+    self._EventRegister:RegisterEvent( "AuthOk",    self, self.CBAuthOk );          -- 有客户端在其它FES上登录成功。RemoveClient
+    self._EventRegister:RegisterEvent( "SyncData",  self, self.CBLoginPLS );        -- 在PLS上登录成功。
+    
 	
 end
 
 function MsgLogin:CBLogin( sock_id, msg_login )
 
+    local tbl_login = msg_login:rtable();
 
-    nlinfo( msg_login:rint32() );
-    nlinfo( msg_login:rdouble() );
-    nlinfo( msg_login:rstring() );
-    nlinfo( msg_login:rint64() );
-    nlinfo( msg_login:rint64() );
-    
-    local pb_login  = msg_login:rstring();
-	local tbl_login = protobuf.decode("PB_MSG.MsgLogin", pb_login)
-	
 	PrintTable(tbl_login);
     
-    msg_login:invert();
+	local sign_str = tbl_login.UID .. tbl_login.Channel .. tbl_login.RoomType .. tbl_login.AppName;
+          sign_str = sign_str .. tbl_login.User .. tbl_login.NonceStr .. tbl_login.Timestamp;
+          sign_str = sign_str .. "BLACKSHEEPWALL";
+        
+	local sign     = string.upper( md5(sign_str) );
+
+
+	print("sign_str:"..sign_str);
+	print("sign:"..sign);
     
-    ClientService:Send( sock_id, msg_login );
+    
+    
+    --------------  账号认证通过
+
+    
+    local msg_authok = CMessage("AuthOk");
+    msg_authok:wint64(tbl_login.UID);
+    BaseService:Broadcast( "FES", msg_authok )      -- 通知其它网关有玩家登录成功。
+    
+    msg_authok:wstring(tbl_login.RoomType);
+    BaseService:Broadcast( "SCH", msg_authok )      -- 玩家认证通过，请求发送数据。
+    
+    
+    local client = ClientMgr:GetClient(tbl_login.UID);
+    
+    if( client ~= nil ) then
+        client.SockID = sock_id;
+    else
+        client              = Client:new();
+        client.SockID       = sock_id;
+        client.UID          = tbl_login.UID;
+        
+        ClientMgr:SetClient(tbl_login.UID, client);
+    end
+    
+    ClientService:SetUIDMap(client.UID, client.SockID);
+    
+	--  通知客户端 账号认证通过.
+    ClientService:Send( sock_id, "AuthOk" );
+--]]
 
 end
+
+-- 有客户端在其它FES上登录成功。RemoveClient
+function MsgLogin:CBAuthOk( sock_id, msg_authok )
+
+    local uid = msg_authok:rint64();
+	print("MsgLogin:AuthOk"..uid);
+    ClientMgr:RemoveClient(uid);
+    
+end
+
+function MsgLogin:CBLoginPLS( pls_id, msg_sdata_2 )
+    
+	local uid           = msg_sdata_2:rint64();
+    local client = ClientMgr:GetClient(uid);
+    
+    if( client ~= nil ) then
+        client.ConPLS = pls_id;
+    end
+end
+
 
 function MsgLogin:Connect( sock_id )
 	print("CallbackClient:Connect"..sock_id);
