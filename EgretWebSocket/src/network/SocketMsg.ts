@@ -58,6 +58,10 @@ class SocketMsg {
         this.buff_msg.writeBytes(egret_buffer, 0, egret_buffer.length);
     }
 
+    wjson(val: any){
+        this.wstring(JSON.stringify(val));
+    }
+
     ////////////////////////
 
     rint32() {

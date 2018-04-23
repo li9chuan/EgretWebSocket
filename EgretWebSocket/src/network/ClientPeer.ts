@@ -49,29 +49,19 @@ class ClientPeer {
         console.log('服务器连接成功！');
 
         let msgout = new SocketMsg("LOGIN");
-        msgout.wint32(111);
-        msgout.wdouble(222.22);
-        msgout.wstring("string");
-        msgout.wint64(4611686016279344128);
-        msgout.wint64(-4611686016279344128);
 
-        //let long = new protobuf.util.Long(2148043776,2148043776,true);
+        let pb_login = new MsgLogin();
+        pb_login.Version = "version";
+        pb_login.Channel = "WX";
+        pb_login.AppName = "WX_5E8A";
+        pb_login.User = "oYsC35RNsWxsYQkKGsZVhxEImRuw";
+        pb_login.NonceStr = "6GosND6R6HCeDWFPGWjQ";
+        pb_login.Token = "C5F9DB80F40EC9A98EA0E94604091198";
+        pb_login.Timestamp = 1523541253;
+        pb_login.UID = 1002;
+        pb_login.RoomType = "RM_DDZ";
 
-        let pb_login = PB_MSG.MsgLogin.create();
-
-        pb_login.Version     = "version";
-        pb_login.Channel     = "WX";
-        pb_login.AppName     = "WX_5E8A";
-        pb_login.User        = "oYsC35RNsWxsYQkKGsZVhxEImRuw";
-        pb_login.NonceStr    = "6GosND6R6HCeDWFPGWjQ";
-        pb_login.Token       = "C5F9DB80F40EC9A98EA0E94604091198";
-        pb_login.Timestamp   = 1523541253;
-        pb_login.UID         = 1002;
-        pb_login.RoomType    = "RM_DDZ";
-
-        msgout.wprotobuf(PB_MSG.MsgLogin, pb_login);
-
-        
+        msgout.wjson(pb_login);
 
         this.sendMsg(msgout);
     }
@@ -93,41 +83,32 @@ class ClientPeer {
 
                 let msg = new SocketMsg();
                 msg.fill(this.recv_buffer, this.recv_buffer.position, msg_len);
-
                 this.processReceive(msg);
-
-                if( this.recv_buffer.bytesAvailable == 0 ){
-                    this.recv_buffer.clear();
-                }
             }
             else {
-                this.recv_buffer.position = this.recv_buffer.position - 4;
+                //this.recv_buffer.position = this.recv_buffer.position - 4;
             }
+
+            this.recv_buffer.clear();
         }
     }
 
     private processReceive(msg: SocketMsg) {
         console.log("recv msg : " + msg.name);
 
-        switch (msg.name){
+        switch (msg.name) {
             case "AuthOk":
-            break;
-
-            case "LOGIN":
-                console.log( msg.rint32() );
-                console.log( msg.rdouble() );
-                console.log( msg.rstring() );
-                console.log( msg.rint64() );
-                console.log( msg.rint64() );
-                console.log( msg.rprotobuf(PB_MSG.MsgLogin) );
-            break;
+                /// 账号认证成功，可以进入场景
+                console.log("recv msg : " + msg.name);
+                break;
             case "SyncPlayerInfo":
+                /// 服务器返回玩家数据
                 let player_info = msg.rjson();
                 console.log( player_info.UID );
                 console.log( player_info );
-            break;
+                break;
             default:
-            break;
+                break;
         }
 
 

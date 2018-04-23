@@ -12,6 +12,7 @@
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
+		"bin-debug/msg/MsgLogin.js",
 		"bin-debug/network/ClientPeer.js",
 		"bin-debug/network/IApplication.js",
 		"bin-debug/network/SocketMsg.js"
