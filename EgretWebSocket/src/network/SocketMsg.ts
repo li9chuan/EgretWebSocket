@@ -84,6 +84,12 @@ class SocketMsg {
         return val.toLong(unsigned);
     }
 
+    rjson(){
+        let len = this.rint32(); 
+        let json_str = this.buff_msg.readUTFBytes(len);
+        return JSON.parse(json_str);
+    }
+
     rprotobuf(msg_type: any) {
         let len = this.rint32();
         let pb_buffer = new egret.ByteArray();
