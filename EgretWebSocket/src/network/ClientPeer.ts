@@ -71,6 +71,8 @@ class ClientPeer {
 
         msgout.wprotobuf(PB_MSG.MsgLogin, pb_login);
 
+        
+
         this.sendMsg(msgout);
     }
 
@@ -120,7 +122,7 @@ class ClientPeer {
                 console.log( msg.rprotobuf(PB_MSG.MsgLogin) );
             break;
             case "SyncPlayerInfo":
-                let player_info = msg.rprotobuf(PB_MSG.MsgPlayerInfo);
+                let player_info = msg.rjson();
                 console.log( player_info.UID );
                 console.log( player_info );
             break;
