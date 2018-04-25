@@ -49,7 +49,6 @@ class ClientPeer {
         console.log('服务器连接成功！');
 
         let msgout = new SocketMsg("LOGIN");
-
         let pb_login = new MsgLogin();
         pb_login.Version = "version";
         pb_login.Channel = "WX";
@@ -100,6 +99,11 @@ class ClientPeer {
             case "AuthOk":
                 /// 账号认证成功，可以进入场景
                 console.log("recv msg : " + msg.name);
+
+                let msgout = new SocketMsg("ER");
+                msgout.wstring("test");
+                this.sendMsg(msgout);
+
                 break;
             case "SyncPlayerInfo":
                 /// 服务器返回玩家数据
