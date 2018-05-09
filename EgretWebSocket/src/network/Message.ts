@@ -1,4 +1,4 @@
-class SocketMsg {
+class Message {
     
     public      name: string;
     public      buff_msg: egret.ByteArray;
@@ -50,8 +50,8 @@ class SocketMsg {
         this.buff_msg.writeDouble(val);
     }
 
-    wprotobuf(msg_type, msg_val) {
-        let buff_msg = msg_type.encode(msg_val).finish();
+    wprotobuf(pb_type, pb_stru) {
+        let buff_msg = pb_type.encode(pb_stru).finish();
         let egret_buffer = new egret.ByteArray(buff_msg);
 
         this.wint32( egret_buffer.length );

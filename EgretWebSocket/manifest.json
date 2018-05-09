@@ -12,9 +12,12 @@
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
-		"bin-debug/msg/MsgLogin.js",
-		"bin-debug/network/ClientPeer.js",
-		"bin-debug/network/IApplication.js",
-		"bin-debug/network/SocketMsg.js"
+		"bin-debug/module/ClientModule.js",
+		"bin-debug/module/LoginModule.js",
+		"bin-debug/module/Json/JsonUser.js",
+		"bin-debug/module/Player/PlayerDataModule.js",
+		"bin-debug/network/Message.js",
+		"bin-debug/network/NetEvent.js",
+		"bin-debug/network/NetMgr.js"
 	]
 }

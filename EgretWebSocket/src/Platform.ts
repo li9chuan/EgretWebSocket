@@ -18,6 +18,22 @@ class DebugPlatform implements Platform {
     }
     async login() {
 
+        let user: JsonUser = ClientModule.GetInstance().UserInfo;
+
+        user.NonceStr   = "6GosND6R6HCeDWFPGWjQ";
+        user.Token      = "C5F9DB80F40EC9A98EA0E94604091198";
+        user.UID        = 1002;
+        user.FES        = "ws://127.0.0.1:9999";
+        user.Timestamp  = 1523541253;
+        user.User       = "oYsC35RNsWxsYQkKGsZVhxEImRuw";
+
+        ClientModule.GetInstance().Version  = "1.0";
+        ClientModule.GetInstance().Channel  = "WX";
+        ClientModule.GetInstance().AppName  = "WX_5E8A";
+        ClientModule.GetInstance().RoomType = "RM_DDZ";
+        ClientModule.GetInstance().User     = "oYsC35RNsWxsYQkKGsZVhxEImRuw";
+
+        NetMgr.GetInstance().Connect(user.FES);
     }
 }
 

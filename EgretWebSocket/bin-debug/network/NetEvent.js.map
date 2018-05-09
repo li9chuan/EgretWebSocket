@@ -1,0 +1,1 @@
+{"version":3,"file":"NetEvent.js","sourceRoot":"","sources":["../../src/network/NetEvent.ts"],"names":[],"mappings":";;;;;;;;;;AAAA;IAAuB,4BAAW;IAMjC,kBAAmB,IAAY,EAAE,OAAwB,EAAE,UAA2B;QAArD,wBAAA,EAAA,eAAwB;QAAE,2BAAA,EAAA,kBAA2B;eACrF,kBAAM,IAAI,EAAE,OAAO,EAAE,UAAU,CAAC;IACjC,CAAC;IAGF,eAAC;AAAD,CAAC,AAXD,CAAuB,KAAK,CAAC,KAAK,GAWjC;AAXK,UAAA,QAAQ,uBAWb,CAAA"}

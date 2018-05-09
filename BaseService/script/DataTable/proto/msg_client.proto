@@ -1,0 +1,75 @@
+syntax = "proto2";
+package PB;
+
+import "define_pro.proto";
+
+message MsgLogin
+{
+  optional string       Version         = 1;
+  optional string       Channel         = 2;
+  optional string       AppName         = 3;
+  optional string       User            = 4;
+  optional string       NonceStr        = 5;
+  optional string       Token           = 6;
+  optional uint64       Timestamp       = 7;
+  optional uint64       UID             = 8;
+  optional string       RoomType        = 9;
+  
+  
+}
+
+message MsgPlayerInfo
+{
+  optional uint64       UID             = 1;
+  optional string       Nickname        = 2;
+  optional uint32       Portrait        = 3;
+  optional uint64       Money           = 4;
+  optional uint64       RMB             = 5;
+  optional uint32       Main            = 6;
+  optional uint64       FlagBit         = 7;
+}
+
+message MsgCreatePrivateRoom
+{
+	optional string 				room_type	        = 1;
+}
+
+message MsgEnterPrivateRoom
+{
+	optional uint64					room_id				= 1;
+    optional string                 room_type           = 2;
+	optional string 				app_name			= 3;
+	optional uint32					game_versione		= 4;
+}
+
+message MsgCard
+{
+	optional uint32                 card                = 1;
+}
+
+message MsgCards
+{
+	repeated uint32                 cards               = 1;
+}
+
+message MsgInt
+{
+	optional int64      value        = 1;
+}
+
+message MsgBool
+{
+	optional bool       value        = 1;
+}
+
+message MsgString
+{
+	optional string     str        = 1;
+}
+
+message MsgError
+{
+	optional uint32     errno       = 1;
+    optional uint64     value       = 2;
+}
+

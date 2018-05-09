@@ -2,7 +2,7 @@
 -- 加载常用模块
 --=========================================================
 
-local BasePath = Utility.GetBasePath() .. "/script/";
+local BasePath = Misc.GetBasePath() .. "/script/";
 package.path = BasePath .. "_FES/?.lua;" .. BasePath .. "SharedLib/?.lua;";
 
 require("InitSharedLib")
@@ -27,8 +27,14 @@ function ServiceInit()
     
     ClientMgr:Init();
     FrontEndService:Init();
+    
+    ClientService:Init( "ClientService", "ws" );
+    
+    --ClientService:LoadSslCA(BasePath.."DataTable/ssl/1_root_bundle.crt");
+    --ClientService:LoadSslCrt(BasePath.."DataTable/ssl/2_ssl.com.crt");
+    --ClientService:LoadSslPrivateKey(BasePath.."DataTable/ssl/3_ssl.com.key");
 
-    ClientService:Listen( "ClientService", "ws", 9999 );
+    ClientService:Listen( 9999 );
 
 end
 

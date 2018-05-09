@@ -6,20 +6,34 @@ function CallbackServer:ctor()
 	self.DisConnectCallbackEvent = "";
 end
 
-function CallbackServer:Listen( name, protocal, port )
+function CallbackServer:Init( name, protocal )
 	self.ConnectCallbackEvent     = name .. "Con";
 	self.DisConnectCallbackEvent  = name .. "Dis";
 	
     local listen_proc = string.lower(protocal);
-    self.Service = bin_types.LuaCallbackServer.NewInstance( {name, listen_proc, port} );
+    self.Service = bin_types.LuaCallbackServer.NewInstance( name, listen_proc );
 end
 
-function CallbackServer:SetUIDMap( uid, sock_id )
-	self.Service:SetUIDMap(uid, sock_id);
+function CallbackServer:Listen( port )
+    self.Service:Listen(port);
 end
 
-function CallbackServer:RemoveUIDMap( uid )
-	self.Service:RemoveUIDMap(uid);
+function CallbackServer:LoadSslCA( ssl_ca )
+    self.Service:LoadSslCA(ssl_ca);
+end
+function CallbackServer:LoadSslCrt( ssl_crt )
+    self.Service:LoadSslCrt(ssl_crt);
+end
+function CallbackServer:LoadSslPrivateKey( ssl_prvkey )
+    self.Service:LoadSslPrivateKey(ssl_prvkey);
+end
+
+function CallbackServer:SetClientData( client_data )
+	self.Service:SetClientData( client_data );
+end
+
+function CallbackServer:RemoveClientData( uid )
+	self.Service:RemoveClientData(uid);
 end
 
 function CallbackServer:Send( sock_id, msg_or_type, proto_type, proto_msg )

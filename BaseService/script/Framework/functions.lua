@@ -26,7 +26,53 @@ function checktable(value)
 end
 
 function md5(value)
-    return Utility.MD5( value, string.len(value) );
+    return Misc.MD5( value, string.len(value) );
+end
+
+function nldebug( str )
+	Debug.Debug(str,2);
+end
+
+function nlinfo( str )
+	Debug.Info(str,2);
+end
+
+function nlwarning( str )
+	Debug.Warning(str,2);
+end
+
+function nlstop( str )
+	Debug.Stop(str,2);
+end
+
+print   = nlinfo;
+
+function enum(enum_type, enum_name)
+	return protobuf.enum_id(enum_type, enum_name);
+end
+
+
+function shuffle(tbl)
+    
+    local tbl_count = #tbl;
+    for i=1,tbl_count do
+        local ridx  = math.random(1, tbl_count);
+        if i~=ridx then
+            local temp  = tbl[i];
+            tbl[i]      = tbl[ridx];
+            tbl[ridx]   = temp;
+        end
+    end
+end
+
+function SetBit( val, enum_type, enum_name )
+    local enum_val = protobuf.enum_id(enum_type, enum_name);
+    Misc.SetBit(val, enum_val);
+    return val;
+end
+    
+function GetServiceID()
+	return ServerNet.GetServiceID();
 end
 
 function PostSub( thread_name, event_type, pb_name, pb_data, from )
@@ -49,9 +95,13 @@ function PostMain( thread_name, event_type, pb_name, pb_data, from )
 
 end
 
-function PrintTable( tbl, depth )
-  --print(JsonUtil.serialise_value(value, indent, depth));
-
+function PrintTable( tbl, indent, depth )
+    Debug.Info(JsonUtil.serialise_value(tbl, indent, depth), 2);
+    --[[
+    if tbl==nil then
+        return;
+    end
+    
     local msg = ""
     depth = depth or 1
     local indent_str = ""
@@ -72,6 +122,8 @@ function PrintTable( tbl, depth )
         end
     end
     print(indent_str .. "}")
+    
+    --]]
 end
 
 function Table2Json( tbl )
@@ -80,6 +132,10 @@ end
 
 function Json2Table( str )
     return Json.decode(str);
+end
+
+function PB2Table( pb_stru, pb_data )
+    return protobuf.decode(pb_stru, pb_data);
 end
 
 -- start --

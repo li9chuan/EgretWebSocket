@@ -29,8 +29,6 @@
 
 class Main extends egret.DisplayObjectContainer {
 
-    private client_net: ClientPeer;
-
     public constructor() {
         super();
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
@@ -67,15 +65,13 @@ class Main extends egret.DisplayObjectContainer {
         this.createGameScene();
         const result = await RES.getResAsync("description_json")
         this.startAnimation(result);
+
+        LoginModule.GetInstance().Init();
+        PlayerDataModule.GetInstance().Init();
+
         await platform.login();
         const userInfo = await platform.getUserInfo();
         console.log(userInfo);
-
-        
-        
-        this.client_net = new ClientPeer("127.0.0.1", 9999);
-
-        
     }
 
     private async loadResource() {
